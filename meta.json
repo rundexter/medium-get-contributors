@@ -10,20 +10,16 @@
         }
     ],
     //Required. Outputs the module emits.
-    "outputs": [
-        {
-            "id": "publicationId",
-            "title":"Publication ID"
-        },
-        {
-            "id": "userId",
-            "title":"User ID"
-        },
-        {
-            "id": "role",
-            "title":"Role"
-        }
-    ],
+    "outputs": [{
+        "id": "userId",
+        "title":"User ID"
+    }, {
+        "id": "role",
+        "title":"Role"
+    }],
+    "providers": [{
+      "name": "medium"
+    }],
     "icon": "medium",
     "title": "Medium: Get Contributors"
 }

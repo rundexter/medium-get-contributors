@@ -1,15 +1,7 @@
-var util = require('./util.js');
-var request = require('request').defaults({
-    baseUrl: 'https://api.medium.com/'
-});
-
-var pickInputs = {
-       'publicationId': { key: 'publicationId', validate: {req: true} }
-    }, pickOutputs = {
-        'publicationId': { keyName: 'data', fields: ['publicationId'] },
-        'userId': { keyName: 'data', fields: ['userId'] },
-        'role': { keyName: 'data', fields: ['role'] }
-    };
+var _     = require('lodash')
+  , agent = require('superagent')
+  , q     = require('q')
+;
 
 module.exports = {
 
@@ -20,25 +12,27 @@ module.exports = {
      * @param {AppData} dexter Container for all data used in this workflow.
      */
     run: function(step, dexter) {
-        var inputs = util.pickInputs(step, pickInputs),
-            validationErrors = util.checkValidateErrors(inputs, pickInputs),
-            token = dexter.environment('medium_access_token');
+        var items = step.inputObject(['publicationId'])
+          , token = dexter.provider('medium').credentials('access_token')
+        ;
 
-        if (!token)
-            return this.fail('A [medium_access_token] environment variable is required for this module');
+        q.all(_.map(items, function(item) {
+            var deferred = q.defer();
+            agent.get('https://api.medium.com/v1/publications/'+item.publicationId+'/contributors')
+              .set('Authorization', 'Bearer '+token)
+              .type('json')
+              .end(deferred.makeNodeResolver())
+            ;
 
-        if (validationErrors)
-            return this.fail(validationErrors);
-
-        request.get({
-            uri: '/v1/publications/' + inputs.publicationId + '/contributors',
-            auth: { bearer: token },
-            json: true
-        }, function (error, response, body) {
-            if (error)
-                this.fail(error);
-            else
-                this.complete(util.pickOutputs(body, pickOutputs));
-        }.bind(this));
+            return deferred
+                     .promise
+                     .then(function(result) {
+                        return _.get(result, 'body.data');
+                     })
+                   ;
+          }))
+          .then(this.complete.bind(this))
+          .catch(this.fail.bind(this))
+        ;
     }
 };

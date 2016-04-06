@@ -62,8 +62,7 @@ module.exports = _.merge({
              * You should update this section with some test input for testing your module
              */
             input: {
-                //Replace VAR1 with the name of an expected input, and add more inputs as needed.
-                publicationId: 'b45573563f5a'
+                "publicationId": "b66b77727563",
             }
         }
     }

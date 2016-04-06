@@ -1,17 +1,18 @@
 {
-   "name": "medium-get-contributors",
-   "version": "0.0.1",
-   "description": "This endpoint returns a list of contributors for a given publication",
-   "main": "index.js",
-   "author": "Run Dexter, Inc",
-   "license": "MIT",
-   "private": true,
-   "dependencies": {
-      "lodash": "^3.10.1",
-      "request": "^2.67.0"
-   },
-   "repository": {
-      "type": "git",
-      "url": "https://github.com/rundexter/medium-get-contributors"
-   }
+  "name": "medium-get-contributors",
+  "version": "0.0.1",
+  "description": "This endpoint returns a list of contributors for a given publication",
+  "main": "index.js",
+  "author": "Run Dexter, Inc",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "lodash": "^4.8.2",
+    "q": "^1.4.1",
+    "superagent": "^1.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rundexter/medium-get-contributors"
+  }
 }
